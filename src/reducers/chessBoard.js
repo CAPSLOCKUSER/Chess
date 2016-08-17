@@ -1,22 +1,28 @@
-import {ActionTypes as AT, DEFAULT_BOARD} from '../constants';
+// @flow
+
+import { ACTION_TYPES as AT, DEFAULT_BOARD } from '../constants';
+import type { ChessBoard } from '../types/ChessTypes';
+import type { MovePieceAction } from '../types/ChessAction';
 
 import find from 'lodash/find';
 
-const chessBoard = (state = DEFAULT_BOARD, action) => {
+const chessBoard = (
+  state: ChessBoard = DEFAULT_BOARD,
+  action: MovePieceAction
+): ChessBoard => {
   switch (action.type) {
     case AT.MOVE_PIECE:
-      console.log('move');
-      const movedPiece = find(state, ({ x, y }) => x === action.from.x && y === action.from.y);
+      const movedPiece = state.find(({ x, y }) => x === action.from.x && y === action.from.y);
       const newState = state
         .filter(({ x, y }) => !(x === action.to.x && y === action.to.y))
         .filter(({ x, y }) => !(x === action.from.x && y === action.from.y));
-      console.log(movedPiece);
       return [
         ...newState,
         {
           x: action.to.x,
           y: action.to.y,
-          piece: movedPiece.piece,
+          color: movedPiece.color,
+          value: movedPiece.value,
         }
       ];
 

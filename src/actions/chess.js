@@ -1,15 +1,9 @@
-import { ActionTypes as AT } from '../constants';
+import { ACTION_TYPES as AT } from '../constants';
 
-export function movePiece(a, b, x, y) {
+export function movePiece(from, to) {
   return {
     type: AT.MOVE_PIECE,
-    from: {
-      x: parseInt(a, 10),
-      y: parseInt(b, 10),
-    },
-    to: {
-      x: parseInt(x, 10),
-      y: parseInt(y, 10),
-    },
+    from,
+    to,
   };
 }
