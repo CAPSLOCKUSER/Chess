@@ -20,7 +20,7 @@ ghostContainer.style.top = '-200px';
 document.body.appendChild(ghostContainer);
 
 let Cell = ({ dispatch, background, x, y, data }: CellProps) => {
-  // console.log('RENDER CELL');
+  console.log('RENDER CELL');
   const hasPiece = !!data;
   const html = hasPiece ? PIECES_HTML[data.color][data.value] : null;
   return (
@@ -69,6 +69,12 @@ let Cell = ({ dispatch, background, x, y, data }: CellProps) => {
   );
 };
 
-Cell = connect()(Cell);
+const mapStateToProps = ({ chessBoard }, { x, y }) => {
+  return {
+    data: chessBoard.find(other => x === other.x && y === other.y),
+  }
+};
+
+Cell = connect(mapStateToProps)(Cell);
 
 export default Cell;
