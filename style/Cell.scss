@@ -9,6 +9,7 @@
   font-size: 42px;
   transition: background-color 0.3s;
   user-select: none;
+  cursor: default;
 
   &.selected {
     background-color: #fbfbbd !important;

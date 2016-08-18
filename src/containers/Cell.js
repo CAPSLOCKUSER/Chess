@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {PIECES_HTML} from '../constants';
 import '../../style/Cell.scss';
 
-import type { Point, Cell as CellType } from '../types/ChessTypes';
+import type {Point, Cell as CellType} from '../types/ChessTypes';
 
 type CellProps = Point & {
   background: string,
@@ -14,10 +14,10 @@ type CellProps = Point & {
   dispatch: (action: any) => void
 }
 
-const div = document.createElement('div');
-div.style.position = 'absolute';
-div.style.top = '-200px';
-const ghostContainer = document.body.appendChild(div);
+const ghostContainer = document.createElement('div');
+ghostContainer.style.position = 'absolute';
+ghostContainer.style.top = '-200px';
+document.body.appendChild(ghostContainer);
 
 let Cell = ({ dispatch, background, x, y, data }: CellProps) => {
   // console.log('RENDER CELL');
