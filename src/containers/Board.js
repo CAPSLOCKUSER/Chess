@@ -1,18 +1,12 @@
 import React from 'react';
 import range from 'lodash/range';
 import Cell from './Cell';
-import Piece from '../components/Piece';
 import {connect} from 'react-redux';
 import find from 'lodash/find';
 import '../../style/Board.scss';
 
 let Board = ({ chessBoard }) => {
-  const getPiece = (i, j) => {
-    const cell = find(chessBoard, ({ x, y }) => x === i && y === j);
-    return (
-      cell ? <Piece {...cell} /> : null
-    );
-  };
+  console.log('board REDER');
   return (
     <div className="board">
       {range(8).map(j => (
@@ -24,9 +18,8 @@ let Board = ({ chessBoard }) => {
                 background={i % 2 !== j % 2 ? '#c0c0c0' : 'white'}
                 x={i}
                 y={j}
-              >
-                {getPiece(i, j)}
-              </Cell>
+                data={find(chessBoard, ({ x, y }) => x === i && y === j)}
+              />
             );
           })}
         </div>
