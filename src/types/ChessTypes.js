@@ -25,3 +25,9 @@ export type Piece = {
 export type Cell = Point & Piece;
 
 export type ChessBoard = Array<Cell>;
+
+export type ChessGame = {
+  board: ChessBoard,
+  activePlayer: Color,
+  removedPieces: Array<Piece>,
+}

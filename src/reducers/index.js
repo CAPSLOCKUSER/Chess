@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux';
-import chessBoard from './chessBoard';
+import chess from './chess';
 
 const ChessApp = combineReducers({
-  chessBoard,
+  chess,
 });
 
 export default ChessApp;

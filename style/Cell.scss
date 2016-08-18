@@ -13,9 +13,6 @@
 
   &.selected {
     background-color: #fbfbbd !important;
-
-    .piece {
-      display: none;
-    }
+    color: transparent;
   }
 }
