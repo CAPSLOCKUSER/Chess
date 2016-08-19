@@ -5,6 +5,7 @@ import {movePiece} from '../actions/chess';
 import {connect} from 'react-redux';
 import {PIECES_HTML} from '../constants';
 import validator from '../validators/chessValidator';
+import { findByPos } from '../utils';
 import '../../style/Cell.scss';
 
 import type {Point, Cell as CellType} from '../types/ChessTypes';
@@ -24,10 +25,14 @@ let Cell = ({ dispatch, background, x, y, data }: CellProps, { store }) => {
   console.log('RENDER CELL');
   const hasPiece = !!data;
   const html = hasPiece ? PIECES_HTML[data.color][data.value] : null;
-  const getFrom = (event: Event): Point => {
+  const getFrom = (event: DragEvent): Point => {
+    if (!event.dataTransfer) {
+      throw new Error('event.dataTransfer is falsy');
+    }
     const { x, y } = JSON.parse(event.dataTransfer.getData('application/json'));
     return { x, y };
   };
+  let acceptingDrop = false;
   return (
     <div
       className="cell"
@@ -55,23 +60,23 @@ let Cell = ({ dispatch, background, x, y, data }: CellProps, { store }) => {
         event.target.classList.add('selected');
         event.dataTransfer.setData('application/json', JSON.stringify({ x, y }));
       }}
-      onDragOver={event => {
-        const action = movePiece(getFrom(event), { x, y });
-        const state = store.getState().chess;
-        if (validator(state, action)) {
-          event.dataTransfer.dropEffect = 'move';
-          event.preventDefault();
-        }
-      }}
       onDragEnter={event => {
         const state = store.getState().chess;
         const action = movePiece(getFrom(event), { x, y });
         if (validator(state, action)) {
           event.target.style.background = '#c6d097';
+          acceptingDrop = true;
+        }
+      }}
+      onDragOver={event => {
+        if (acceptingDrop) {
+          event.dataTransfer.dropEffect = 'move';
+          event.preventDefault();
         }
       }}
       onDragLeave={event => {
         event.target.style.background = background;
+        acceptingDrop = false;
       }}
       onDragEnd={event => {
         event.target.classList.remove('selected');
@@ -79,14 +84,9 @@ let Cell = ({ dispatch, background, x, y, data }: CellProps, { store }) => {
       }}
       onDrop={event => {
         event.preventDefault();
-        {/*const state = store.getState().chess;*/}
-        const action = movePiece(getFrom(event), { x, y });
-        dispatch(action);
+        dispatch(movePiece(getFrom(event), { x, y }));
         event.target.style.background = background;
-        {/*if (validator(state, action)) {
-          event.target.style.background = background;
-          dispatch(action);
-        }*/}
+        acceptingDrop = false;
       }}
     />
   );
@@ -98,7 +98,7 @@ Cell.contextTypes = {
 
 const mapStateToProps = ({ chess: { board } }, { x, y }) => {
   return {
-    data: board.find(other => x === other.x && y === other.y),
+    data: board.find(findByPos(x, y)),
   }
 };
 

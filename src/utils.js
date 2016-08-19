@@ -1,3 +1,5 @@
-import type { Dimension as D, Point } from './types/ChessTypes';
+// @flow
 
-export const findByPos = (i: D, j: D) => ({ x, y }: Point) => x === i && y === j;
+import type { Dimension as D, Cell } from './types/ChessTypes';
+
+export const findByPos = (i: D, j: D) => ({ x, y }: Cell) => x === i && y === j;

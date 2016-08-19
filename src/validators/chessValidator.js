@@ -3,8 +3,14 @@
 import { ACTION_TYPES as AT } from '../constants';
 import { findByPos } from '../utils';
 import type { ChessGame, Point } from '../types/ChessTypes';
+import type { MovePieceAction } from '../types/ChessAction';
 
-const getWay = (from: Point, to: Point): Point => {
+type WayType = {
+  horizontal: number,
+  vertical: number,
+}
+
+const getWay = (from: Point, to: Point): WayType => {
   return {
     horizontal: Math.abs(from.x - to.x),
     vertical: Math.abs(from.y - to.y),
@@ -32,18 +38,21 @@ const chessValidator = (state: ChessGame, { type: actionType, from, to }: MovePi
       const way = getWay(from, to);
       switch (value) {
         case 'PAWN':
-          if (way.horizontal !== 0) {
-            return false;
+          const direction = color === 'WHITE' ? 1 : -1;
+          const startingPosition = color === 'WHITE' ? 1 : 6;
+          const forwardDistance = direction * (to.y - from.y);
+          const isStarting = from.y === startingPosition;
+
+          if (way.horizontal === 1) {
+            return !!removedPiece && forwardDistance === 1;
+          } else if (way.horizontal === 0) {
+            if (!!removedPiece) {
+              return false;
+            }
+            return isStarting ? forwardDistance <= 2 : forwardDistance === 1;
           }
-          if (color === 'WHITE') {
-            const isStarting = from.y === 1;
-            const distance = from.y - to.y;
-            return isStarting ? -distance <= 2 : -distance === 1;
-          } else {
-            const isStarting = from.y === 6;
-            const distance = from.y - to.y;
-            return isStarting ? distance <= 2 : distance === 1;
-          }
+
+          return false;
         case 'ROOK':
           return way.horizontal === 0 || way.vertical === 0;
         case 'KNIGHT':
@@ -57,9 +66,6 @@ const chessValidator = (state: ChessGame, { type: actionType, from, to }: MovePi
         default:
           return false;
       }
-
-      return true;
-
     default:
       return false;
   }
