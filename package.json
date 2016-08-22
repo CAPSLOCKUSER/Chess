@@ -10,6 +10,7 @@
     "babel-polyfill": "^6.13.0",
     "babel-preset-es2015": "^6.13.2",
     "babel-preset-react": "^6.11.1",
+    "classnames": "^2.2.5",
     "css-loader": "^0.23.1",
     "empty": "^0.10.1",
     "keymirror": "^0.1.1",
@@ -28,7 +29,8 @@
     "watch": "rimraf ./build && webpack --progress --colors --watch",
     "build": "rimraf ./build && PRODUCTION=1 webpack",
     "start": "open index.html",
-    "flow": "flow check src"
+    "flow": "flow check src",
+    "postinstall": "npm run build"
   },
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
