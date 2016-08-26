@@ -3,16 +3,16 @@
 import React from 'react';
 import {movePiece} from '../actions/chess';
 import {connect} from 'react-redux';
-import {PIECES_HTML} from '../constants';
 import validator from '../validators/chessValidator';
 import { findByPos } from '../utils';
+import classNames from 'classnames';
 import '../../style/Cell.scss';
 
 import type {Point, Cell as CellType} from '../types/ChessTypes';
 
 type CellProps = Point & {
   background: string,
-  data: CellType,
+  data?: CellType,
   dispatch: (action: any) => void,
 }
 
@@ -21,10 +21,9 @@ ghostContainer.style.position = 'absolute';
 ghostContainer.style.top = '-200px';
 document.body.appendChild(ghostContainer);
 
-let Cell = ({ dispatch, background, x, y, data }: CellProps, { store }) => {
+let Cell = ({ dispatch, background, x, y, data = {} }: CellProps, { store }) => {
   console.log('RENDER CELL');
   const hasPiece = !!data;
-  const html = hasPiece ? PIECES_HTML[data.color][data.value] : null;
   const getFrom = (event: DragEvent): Point => {
     if (!event.dataTransfer) {
       throw new Error('event.dataTransfer is falsy');
@@ -32,12 +31,12 @@ let Cell = ({ dispatch, background, x, y, data }: CellProps, { store }) => {
     const { x, y } = JSON.parse(event.dataTransfer.getData('application/json'));
     return { x, y };
   };
+  const cellClass = classNames('cell', data.value, data.color).toLowerCase();
   let acceptingDrop = false;
   return (
     <div
-      className="cell"
+      className={cellClass}
       style={{ background }}
-      dangerouslySetInnerHTML={{__html: html}}
 
       draggable={hasPiece}
       onDragStart={event => {

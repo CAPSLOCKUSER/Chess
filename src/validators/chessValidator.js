@@ -45,7 +45,7 @@ const isMoveShapeValid = ({ color, value }, removedPiece, from, to) => {
     case 'QUEEN':
       return (horizontal === vertical) || horizontal === 0 || vertical === 0;
     case 'KING':
-      return horizontal * vertical <= 1;
+      return horizontal <= 1 && vertical <= 1;
     default:
       return false;
   }

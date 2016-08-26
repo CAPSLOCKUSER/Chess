@@ -11,6 +11,24 @@
   user-select: none;
   cursor: default;
 
+  &.white {
+    &.king::after { content: '\2654'; }
+    &.queen::after { content: '\2655'; }
+    &.rook::after { content: '\2656'; }
+    &.bishop::after { content: '\2657'; }
+    &.knight::after { content: '\2658'; }
+    &.pawn::after { content: '\2659'; }
+  }
+
+  &.black {
+    &.king::after { content: '\265A'; }
+    &.queen::after { content: '\265B'; }
+    &.rook::after { content: '\265C'; }
+    &.bishop::after { content: '\265D'; }
+    &.knight::after { content: '\265E'; }
+    &.pawn::after { content: '\265F'; }
+  }
+
   &.selected {
     background-color: #fbfbbd !important;
     color: transparent;
